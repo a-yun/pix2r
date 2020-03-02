@@ -185,6 +185,32 @@ class SawyerRandomEnv(SawyerXYZEnv):
             objPos = self.data.site_xpos[self.model.site_name2id('windowHandleCloseStart')]
         elif self._obj_goal == 'peg_unplug':
             objPos = self.data.site_xpos[self.model.site_name2id('pegEnd')]
+        elif self._obj_goal == 'button_top_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('buttonTopStart_2')]
+        elif self._obj_goal == 'button_side_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('buttonSideStart_2')]
+        elif self._obj_goal == 'coffee_button_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('coffeeButtonStart_2')]
+        elif self._obj_goal == 'handle_press_top_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('handleTopStart_2')]
+        elif self._obj_goal == 'handle_press_side_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('handleSideStart_2')]
+        elif self._obj_goal == 'door_lock_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('doorLockStartLock_2')]
+        elif self._obj_goal == 'door_unlock_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('doorLockStartUnlock_2')]
+        elif self._obj_goal == 'dial_turn_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('dialStart_2')]
+        elif self._obj_goal == 'faucet_open_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('faucetHandleStartOpen_2')]
+        elif self._obj_goal == 'faucet_close_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('faucetHandleStartClose_2')]
+        elif self._obj_goal == 'window_open_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('windowHandleOpenStart_2')]
+        elif self._obj_goal == 'window_close_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('windowHandleCloseStart_2')]
+        elif self._obj_goal == 'peg_unplug_2':
+            objPos = self.data.site_xpos[self.model.site_name2id('pegEnd_2')]
 
         flat_obs = np.concatenate((hand, objPos))
         if self.obs_type == 'with_goal_and_id':
@@ -223,6 +249,7 @@ class SawyerRandomEnv(SawyerXYZEnv):
     #     else:
     #         return np.concatenate([flat_obs, self._state_goal_idx])
 
+    """
     def _get_obs_dict(self):
         hand = self.get_endeff_pos()
         objPos =  self.get_site_pos('dialStart')
@@ -232,6 +259,7 @@ class SawyerRandomEnv(SawyerXYZEnv):
             state_desired_goal=self._state_goal,
             state_achieved_goal=objPos,
         )
+    """
 
     def _get_info(self):
         pass
@@ -259,10 +287,10 @@ class SawyerRandomEnv(SawyerXYZEnv):
         qvel[9:15] = 0
         self.set_state(qpos, qvel)
 
-    def _set_obj_xyz(self, pos):
+    def _set_obj_xyz(self, pos, second=False):
         qpos = self.data.qpos.flat.copy()
         qvel = self.data.qvel.flat.copy()
-        joint_id = self.model.joint_names.index('doorJoint')
+        joint_id = self.model.joint_names.index('doorJoint_2') if second else self.model.joint_names.index('doorJoint')
         qpos[joint_id] = pos
         qvel[joint_id] = 0
         self.set_state(qpos, qvel)
@@ -291,6 +319,26 @@ class SawyerRandomEnv(SawyerXYZEnv):
         self.sim.model.body_pos[self.model.body_name2id('window_wall')] = np.array([-7, -8, -10.])
         self.sim.model.body_pos[self.model.body_name2id('box')] = np.array([-7, -7, -10.])
         self.sim.model.body_pos[self.model.body_name2id('peg')] = np.array([-7, -6, -10.])
+        self.sim.model.body_pos[self.model.body_name2id('box_top_2')] = np.array([-10, -10, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('button_top_2')] = np.array([-10, -9, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('box_side_2')] = np.array([-10, -8, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('button_side_2')] = np.array([-10, -7, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('coffee_button_2')] = np.array([-10, -6, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('coffee_machine_2')] = np.array([-9, -10, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('handle_press_top_2')] = np.array([-9, -9, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('handle_press_side_2')] = np.array([-9, -8, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('box_handle_press_top_2')] = np.array([-9, -7, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('box_handle_press_side_2')] = np.array([-9, -6, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('door_2')] = np.array([-8, -10, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('door_lock_2')] = np.array([-8, -9, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('dial_2')] = np.array([-8, -8, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('faucetBase_2')] = np.array([-8, -7, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('faucet_2')] = np.array([-8, -6, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('window_2')] = np.array([-7, -10, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('window_another_2')] = np.array([-7, -9, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('window_wall_2')] = np.array([-7, -8, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('box_2')] = np.array([-7, -7, -20.])
+        self.sim.model.body_pos[self.model.body_name2id('peg_2')] = np.array([-7, -6, -20.])
         # randomly sample objects for each position
         self._state_goal = None
         self._obj_goal = None
@@ -439,6 +487,145 @@ class SawyerRandomEnv(SawyerXYZEnv):
                 self.objHeight = self.get_body_com('peg').copy()[0]
                 self.heightTarget = self.objHeight + self.liftThresh
                 self.maxPlacingDist = np.linalg.norm(self._state_goal - self.get_body_com('peg'))
+            elif curr_obj == 'button_top_2':
+                box_pos = np.array([x, y, 0.05])
+                button_pos = box_pos.copy()
+                button_pos[1] += 0.08
+                button_pos[2] += 0.07
+                self.sim.model.body_pos[self.model.body_name2id('box_top_2')] = box_pos
+                self.sim.model.body_pos[self.model.body_name2id('button_top_2')] = button_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'button_top_2'
+                    self._state_goal = button_pos.copy()
+                    self._state_goal[2] -= 0.02
+                self.maxDist = np.abs(self.data.site_xpos[self.model.site_name2id('buttonTopStart_2')][2] - self._state_goal[2])
+            elif curr_obj == 'button_side_2':
+                box_pos = np.array([x, y, 0.05])
+                button_pos = box_pos.copy()
+                button_pos[1] -= 0.06
+                button_pos[2] += 0.07
+                self.sim.model.body_pos[self.model.body_name2id('box_side_2')] = box_pos
+                self.sim.model.body_pos[self.model.body_name2id('button_side_2')] = button_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'button_side_2'
+                    self._state_goal = self.get_site_pos('box_side_hole_2')
+                self.maxDist = np.abs(self.data.site_xpos[self.model.site_name2id('buttonSideStart_2')][1] - self._state_goal[1])
+            elif curr_obj == 'coffee_button_2':
+                coffee_machine_pos = np.array([x, y, 0.28])
+                button_pos = coffee_machine_pos + np.array([0., -0.12, 0.05])
+                self.sim.model.body_pos[self.model.body_name2id('coffee_machine_2')] = coffee_machine_pos
+                self.sim.model.body_pos[self.model.body_name2id('coffee_button_2')] = button_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'coffee_button_2'
+                    self._state_goal = self.get_site_pos('coffee_goal_2')
+                self.maxDist = np.abs(self.data.site_xpos[self.model.site_name2id('coffeeButtonStart_2')][1] - self._state_goal[1])
+            elif curr_obj == 'handle_press_top_2':
+                box_handle_press_top_pos = np.array([x, y, 0.05])
+                handle_press_top_pos = box_handle_press_top_pos.copy()
+                handle_press_top_pos[1] -= 0.1
+                handle_press_top_pos[2] += 0.09
+                self.sim.model.body_pos[self.model.body_name2id('handle_press_top_2')] = handle_press_top_pos
+                self.sim.model.body_pos[self.model.body_name2id('box_handle_press_top_2')] = box_handle_press_top_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'handle_press_top_2'
+                    self._state_goal = self.get_site_pos('handleTopGoalPress_2')
+                self.maxDist = np.abs(self.data.site_xpos[self.model.site_name2id('handleTopStart_2')][-1] - self._state_goal[-1])
+            elif curr_obj == 'handle_press_side_2':
+                box_handle_press_side_pos = np.array([x, y, 0.05])
+                handle_press_side_pos = box_handle_press_side_pos.copy()
+                handle_press_side_pos[0] += 0.1
+                handle_press_side_pos[2] += 0.09
+                self.sim.model.body_pos[self.model.body_name2id('handle_press_side_2')] = handle_press_side_pos
+                self.sim.model.body_pos[self.model.body_name2id('box_handle_press_side_2')] = box_handle_press_side_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'handle_press_side_2'
+                    self._state_goal = self.get_site_pos('handleSideGoalPress_2')
+                self.maxDist = np.abs(self.data.site_xpos[self.model.site_name2id('handleSideStart_2')][-1] - self._state_goal[-1])
+            elif curr_obj == 'door_lock_2':
+                door_pos = np.array([x, y, 0.1])
+                self.sim.model.body_pos[self.model.body_name2id('door_2')] = door_pos
+                self.sim.model.body_pos[self.model.body_name2id('door_lock_2')] = door_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'door_lock_2'
+                    self._state_goal = door_pos + np.array([0, -0.04, -0.03])
+                    self.maxPullDist = np.linalg.norm(self._state_goal - self.data.get_geom_xpos('doorLockGeom_2'))
+            elif curr_obj == 'door_unlock_2':
+                door_pos = np.array([x, y, 0.1])
+                self.sim.model.body_pos[self.model.body_name2id('door_2')] = door_pos
+                self.sim.model.body_pos[self.model.body_name2id('door_lock_2')] = door_pos
+                # rotate the handle
+                self._set_obj_xyz(1.5708, second=True)
+                if self._state_goal is None:
+                    self._obj_goal = 'door_unlock_2'
+                    self._state_goal = door_pos + np.array([0.1, -0.04, 0.07])
+                    self.maxPullDist = np.linalg.norm(self._state_goal - self.data.get_geom_xpos('doorLockGeom_2'))
+            elif curr_obj == 'dial_turn_2':
+                dial_pos = np.array([x, y, 0.05])
+                self.sim.model.body_pos[self.model.body_name2id('dial_2')] = dial_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'dial_turn_2'
+                    self._state_goal = dial_pos + np.array([0, 0.03, 0.03])
+                    self.maxPullDist = np.abs(self._state_goal[1] - y)
+            elif curr_obj == 'faucet_open_2':
+                faucet_pos = np.array([x, y, 0.05])
+                self.sim.model.body_pos[self.model.body_name2id('faucet_2')] = faucet_pos
+                self.sim.model.body_pos[self.model.body_name2id('faucetBase_2')] = faucet_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'faucet_open_2'
+                    self._state_goal = faucet_pos + np.array([0.1, -0.015, 0.065])
+                    self.maxPullDist = np.linalg.norm(self._state_goal - faucet_pos)
+            elif curr_obj == 'faucet_close_2':
+                faucet_pos = np.array([x, y, 0.05])
+                self.sim.model.body_pos[self.model.body_name2id('faucet_2')] = faucet_pos
+                self.sim.model.body_pos[self.model.body_name2id('faucetBase_2')] = faucet_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'faucet_close_2'
+                    self._state_goal = faucet_pos + np.array([-0.1, -0.015, 0.065])
+                    self.maxPullDist = np.linalg.norm(self._state_goal - faucet_pos)
+            elif curr_obj == 'window_open_2':
+                window_pos = np.array([x, y, 0.16])
+                window_another_pos = window_pos + np.array([0.2, 0.03, 0])
+                wall_pos = window_pos - np.array([-0.1, 0, 0.12])
+                self.sim.model.body_pos[self.model.body_name2id('window_2')] = window_pos
+                self.sim.model.body_pos[self.model.body_name2id('window_another_2')] = window_another_pos
+                self.sim.model.body_pos[self.model.body_name2id('window_wall_2')] = wall_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'window_open_2'
+                    self._state_goal = window_pos.copy()
+                    self._state_goal[0] += 0.18
+                self.liftThresh = 0.02
+                self.objHeight = self.data.get_geom_xpos('windowHandle_2')[2]
+                self.heightTarget = self.objHeight + self.liftThresh
+                self.maxPullDist = 0.2
+                self.maxPullDist = 0.2
+            elif curr_obj == 'window_close_2':
+                window_pos = np.array([x, y, 0.16])
+                window_another_pos = window_pos + np.array([0, 0.03, 0])
+                wall_pos = window_pos - np.array([0.1, 0, 0.12])
+                self.sim.model.body_pos[self.model.body_name2id('window_2')] = window_pos
+                self.sim.model.body_pos[self.model.body_name2id('window_another_2')] = window_another_pos
+                self.sim.model.body_pos[self.model.body_name2id('window_wall_2')] = wall_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'window_close_2'
+                    self._state_goal = window_pos.copy()
+                    self._state_goal[0] -= 0.18
+                self.liftThresh = 0.02
+                self.objHeight = self.data.get_geom_xpos('windowHandle_2')[2]
+                self.heightTarget = self.objHeight + self.liftThresh
+                self.maxPullDist = 0.2
+            elif curr_obj == 'peg_unplug_2':
+                box_pos = np.array([x, y, 0.05])
+                self.sim.model.body_pos[self.model.body_name2id('box_2')] = box_pos
+                hole_pos = self.sim.model.site_pos[self.model.site_name2id('hole_2')] + self.sim.model.body_pos[self.model.body_name2id('box_2')]
+                self.sim.model.body_pos[self.model.body_name2id('peg_2')] = hole_pos
+                if self._state_goal is None:
+                    self._obj_goal = 'peg_unplug_2'
+                    self._state_goal = hole_pos.copy()
+                    self._state_goal[0] += 0.2
+                self.liftThresh = 0.04
+                self.objHeight = self.get_body_com('peg_2').copy()[0]
+                self.heightTarget = self.objHeight + self.liftThresh
+                self.maxPlacingDist = np.linalg.norm(self._state_goal - self.get_body_com('peg_2'))
 
 
         self.curr_path_length = 0
@@ -901,6 +1088,8 @@ class SawyerRandomEnv(SawyerXYZEnv):
             assert placeRew >=0
             reward = reachRew + placeRew
             success = (placingDist <= 0.07)
+        else:
+            raise Exception(f'Invalid goal: {self._obj_goal}')
 
         if self.reward_type == 'sparse':
             reward = 1 if success else 0

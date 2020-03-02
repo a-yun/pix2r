@@ -12,6 +12,19 @@ objects = [
             'window_open',
             'window_close',
             'peg_unplug',
+            'button_top_2', 
+            'button_side_2', 
+            'coffee_button_2', 
+            'handle_press_top_2',
+            'handle_press_side_2',
+            'door_lock_2',
+            'door_unlock_2',
+            'dial_turn_2',
+            'faucet_open_2',
+            'faucet_close_2',
+            'window_open_2',
+            'window_close_2',
+            'peg_unplug_2',
         ]
 
 obj2grp = {
@@ -28,6 +41,19 @@ obj2grp = {
             'window_open': 'window',
             'window_close': 'window',
             'peg_unplug': 'peg_unplug',
+            'button_top_2': 'button_top_2', 
+            'button_side_2': 'button_side_2', 
+            'coffee_button_2': 'coffee_button_2', 
+            'handle_press_top_2': 'handle_press_top_2',
+            'handle_press_side_2': 'handle_press_side_2',
+            'door_lock_2': 'door_2',
+            'door_unlock_2': 'door_2',
+            'dial_turn_2': 'dial_turn_2',
+            'faucet_open_2': 'faucet_2',
+            'faucet_close_2': 'faucet_2',
+            'window_open_2': 'window_2',
+            'window_close_2': 'window_2',
+            'peg_unplug_2': 'peg_unplug_2',
         }
 
 def enable_gpu_rendering():

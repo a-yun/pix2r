@@ -1,3 +1,25 @@
+# This is a hack to enable GPU rendering.
+from dm_control import mujoco
+# Load a model from an MJCF XML string.
+xml_string = """
+<mujoco>
+<worldbody>
+<light name="top" pos="0 0 1.5"/>
+<geom name="floor" type="plane" size="1 1 .1"/>
+<body name="box" pos="0 0 .3">
+  <joint name="up_down" type="slide" axis="0 0 1"/>
+  <geom name="box" type="box" size=".2 .2 .2" rgba="1 0 0 1"/>
+  <geom name="sphere" pos=".2 .2 .2" size=".1" rgba="0 1 0 1"/>
+</body>
+</worldbody>
+</mujoco>
+"""
+
+physics = mujoco.Physics.from_xml_string(xml_string)
+# Render the default camera view as a numpy array of pixels.
+pixels = physics.render()
+
+
 import torch
 import torch.nn as nn
 from torch.distributions import MultivariateNormal
@@ -6,13 +28,15 @@ import numpy as np
 from PIL import Image
 import sys
 from collections import namedtuple
+import os
 import os.path
-sys.path.insert(0, '/u/pgoyal/Research/metaworld')
+sys.path.insert(0, '/u/antony/research/metaworld')
 from metaworld.envs.mujoco.sawyer_xyz.sawyer_random import SawyerRandomEnv
 from ppo import Memory, ActorCritic, PPO
 from utils import objects, obj2grp
 
-DATASET_DIR = 'metaworld-dataset'
+DATASET_DIR = '../../metaworld-dataset'
+
 
 def create_random_env(obj_id):
     # randonly sample positions until collision
@@ -37,6 +61,8 @@ def create_random_env(obj_id):
         while True:
             if len(obj_ids) == 0:
                 obj_id = obj_id
+            elif len(obj_ids) == 1:
+                obj_id = obj_id + 13
             else:
                 obj_id = np.random.choice(range(len(objects)))
             obj = objects[obj_id]
@@ -79,10 +105,11 @@ def main(args):
 
     trial = 0
     env_id = args.start
-    save_dir = '{}/obj{}-env{}/'.format(DATASET_DIR, args.obj_id, env_id)
+    save_dir = '{}/obj{}-env{}'.format(DATASET_DIR, args.obj_id, env_id)
     while os.path.exists('{}/env.txt'.format(save_dir)):
         env_id += 1
-        save_dir = '{}/obj{}-env{}/'.format(DATASET_DIR, args.obj_id, env_id)
+        save_dir = '{}/obj{}-env{}'.format(DATASET_DIR, args.obj_id, env_id)
+    os.makedirs(save_dir, exist_ok=True)
 
     while env_id < args.end:
         trial += 1
@@ -142,7 +169,7 @@ def main(args):
                 avg_length = int(avg_length/log_interval)
                 running_reward = int((running_reward/log_interval))
                 
-                print('Trial: {} \t Episode: {} \t Length: {} \t Reward: {}'.format(trial, i_episode, avg_length, running_reward))
+                print('Trial: {} \t Episode: {} \t Length: {} \t Reward: {} \t Success: {}'.format(trial, i_episode, avg_length, running_reward, success))
                 running_reward = 0
                 avg_length = 0
 
@@ -206,6 +233,7 @@ def main(args):
             while os.path.exists('{}/env.txt'.format(save_dir)):
                 env_id += 1
                 save_dir = '{}/obj{}-env{}/'.format(DATASET_DIR, args.obj_id, env_id)
+            os.makedirs(save_dir, exist_ok=True)
 
 def get_args():
     import argparse

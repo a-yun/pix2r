@@ -9,7 +9,7 @@ import numpy as np
 from torch.nn.utils.rnn import pad_sequence
 import pickle
 
-DATA_DIR = '../../data/'
+DATA_DIR = '../../data'
 FRAMES_DIR = '../../data/processed-frames/'
 ENVS_DIR = '../../data/envs/'
 
